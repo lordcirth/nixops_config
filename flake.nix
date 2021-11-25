@@ -19,8 +19,8 @@
         deployment.targetHost = "localhost";
         deployment.targetEnv  = "libvirtd";
       };
-      cdb1 = cdb;
-
+      #cdb1 = cdb;
+      web1 = import ./lighttpd.nix;
     };
   };
 }
