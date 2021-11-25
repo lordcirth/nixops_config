@@ -7,11 +7,17 @@
   };
 
   outputs = { self, nixpkgs, nixops }: {
+    nixopsConfigurations.default = {
+        nixpkgs = nixpkgs;
+      network = {
+        enableRollback = true;
+      };
 
-    nixopsConfigurations = {
-      default = {
-        inherit nixpkgs;
+      defaults = {
+        deployment.targetHost = "localhost";
+        deployment.targetEnv  = "libvirt";
+      };
+      vm1 = {};
     };
-
   };
 }
