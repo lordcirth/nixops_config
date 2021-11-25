@@ -7,7 +7,9 @@
   };
 
   outputs = { self, nixpkgs, nixops }: {
-    nixopsConfigurations.default = {
+    nixopsConfigurations.default = 
+      let cdb = import ./cdb.nix; in
+      {
         nixpkgs = nixpkgs;
       network = {
         enableRollback = true;
@@ -15,9 +17,10 @@
 
       defaults = {
         deployment.targetHost = "localhost";
-        deployment.targetEnv  = "libvirt";
+        deployment.targetEnv  = "libvirtd";
       };
-      vm1 = {};
+      cdb1 = cdb;
+
     };
   };
 }
