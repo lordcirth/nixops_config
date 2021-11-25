@@ -1,5 +1,7 @@
 { config, pkgs, nodes, ... }: {
   services.cockroachdb = {
-  enable = true;
-  join = [ nodes.cdb1.name ];
-};
+    enable = true;
+    join = [ nodes.cdb1.name ];
+    insecure = true;
+  };
+}
