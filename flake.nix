@@ -20,7 +20,8 @@
         deployment.targetEnv  = "libvirtd";
       };
       web1 = import ./lighttpd.nix;
-      haproxy1 = import ./haproxy.nix;
+      haproxy1 = {
+        imports = [./haproxy.nix ./common.nix];
     };
   };
 }

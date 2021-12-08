@@ -1,9 +1,10 @@
-{ config, pkgs, nodes, ... }: let {
+let 
   global = ''
     global
     log /dev/log local0 notice
-  ''
-} in {
+  '';
+in
+{ config, pkgs, nodes, ... }: {
   services.haproxy = {
     enable = true;
     config = global;
