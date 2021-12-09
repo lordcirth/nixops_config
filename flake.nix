@@ -7,21 +7,17 @@
   };
 
   outputs = { self, nixpkgs, nixops }: {
-    nixopsConfigurations.default = 
-      let cdb = import ./cdb.nix; in
-      {
-        nixpkgs = nixpkgs;
-      network = {
-        enableRollback = true;
-      };
+    nixopsConfigurations.default = {
+      nixpkgs = nixpkgs;
+      network = { enableRollback = true; };
 
       defaults = {
         deployment.targetHost = "localhost";
-        deployment.targetEnv  = "libvirtd";
+        deployment.targetEnv = "libvirtd";
+        imports = [ ./common.nix ];
       };
       web1 = import ./lighttpd.nix;
-      haproxy1 = {
-        imports = [./haproxy.nix ./common.nix];
+      haproxy1 = { imports = [ ./haproxy.nix ]; };
     };
   };
 }
