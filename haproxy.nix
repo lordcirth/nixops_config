@@ -1,5 +1,7 @@
 { config, lib, pkgs, nodes, ... }:
 let
+  unlines = lib.concatStringsSep "\n";
+
   global = ''
     global
       log /dev/log local0 notice
@@ -9,16 +11,16 @@ let
       bind 0.0.0.0:443
   '';
   
-  site = { sitename, backends }: ''
+  site = { sitename, backend_servers }: ''
     backend ${sitename}
-  '' + unlines map backend backends;
+  '' + unlines (map (backend) backend_servers);
 
-  backend = {backends}: ''
-    server ${backend}
+  backend = server: ''
+    server ${server}
   '';
-in { config, pkgs, nodes, ... }: {
+in {
   services.haproxy = {
     enable = true;
-    config = global + site { sitename = "foo"; backends = ["localhost"]; };
+    config = global + site { sitename = "foo"; backend_servers = ["localhost"]; };
   };
 }
