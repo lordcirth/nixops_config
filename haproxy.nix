@@ -19,24 +19,23 @@ let
 
   stats = ''
     listen stats
-    bind 0.0.0.0:1936
-    mode http
-    log global
+      bind 0.0.0.0:1936
+      mode http
+      log global
 
-    stats enable
-    stats hide-version
-    stats refresh 30s
-    stats show-node
-    stats uri /haproxy?stats
+      stats enable
+      stats hide-version
+      stats refresh 30s
+      stats show-node
+      stats uri /haproxy?stats
   '';
   
   site = { sitename, backend_servers }: ''
     backend ${sitename}
   '' + unlines (map (backend) backend_servers);
 
-  backend = server: ''
-    server ${server} ${server}:443
-  '';
+  backend = server: "  server ${server} ${server}:443";
+
 in {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
