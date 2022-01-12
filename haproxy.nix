@@ -6,6 +6,7 @@ let
     global
       log /dev/log local0 notice
 
+    defaults
       timeout connect 10000
       timeout check 10000
       timeout client 30000
@@ -24,6 +25,8 @@ let
     server ${server} ${server}:443
   '';
 in {
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
   services.haproxy = {
     enable = true;
     config = global + site { sitename = "foo"; backend_servers = ["localhost"]; };
