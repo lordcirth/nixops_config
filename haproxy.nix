@@ -15,6 +15,7 @@ let
     frontend main_frontend
       bind 0.0.0.0:80
       bind 0.0.0.0:443
+
   '';
 
   stats = ''
@@ -28,19 +29,20 @@ let
       stats refresh 30s
       stats show-node
       stats uri /haproxy?stats
+
   '';
   
   site = { sitename, backend_servers }: ''
     backend ${sitename}
   '' + unlines (map (backend) backend_servers);
 
-  backend = server: "  server ${server} ${server}:443";
+  backend = server: "  server ${server} ${server}:80 check";
 
 in {
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 1936 ];
 
   services.haproxy = {
     enable = true;
-    config = global + stats + site { sitename = "foo"; backend_servers = ["localhost"]; };
+    config = global + stats + site { sitename = "foo"; backend_servers = [ "web1" ]; };
   };
 }
