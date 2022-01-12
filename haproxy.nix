@@ -16,6 +16,19 @@ let
       bind 0.0.0.0:80
       bind 0.0.0.0:443
   '';
+
+  stats = ''
+    listen stats
+    bind 0.0.0.0:1936
+    mode http
+    log global
+
+    stats enable
+    stats hide-version
+    stats refresh 30s
+    stats show-node
+    stats uri /haproxy?stats
+  '';
   
   site = { sitename, backend_servers }: ''
     backend ${sitename}
@@ -29,6 +42,6 @@ in {
 
   services.haproxy = {
     enable = true;
-    config = global + site { sitename = "foo"; backend_servers = ["localhost"]; };
+    config = global + stats + site { sitename = "foo"; backend_servers = ["localhost"]; };
   };
 }
