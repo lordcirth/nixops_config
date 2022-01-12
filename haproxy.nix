@@ -16,6 +16,8 @@ let
       bind 0.0.0.0:80
       bind 0.0.0.0:443
 
+      default_backend foo
+
   '';
 
   stats = ''
