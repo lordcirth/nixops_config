@@ -16,7 +16,6 @@ let
       bind 0.0.0.0:80
       bind 0.0.0.0:443
 
-      default_backend foo
 
   '';
 
@@ -42,9 +41,10 @@ let
 
 in {
   networking.firewall.allowedTCPPorts = [ 80 443 1936 ];
+  boot.kernel.sysctl = { "net.ipv4.ip_nonlocal_bind" = true; };
 
   services.haproxy = {
     enable = true;
-    config = global + stats + site { sitename = "foo"; backend_servers = [ "web1" ]; };
+    config = global + stats + site { sitename = "jargon"; backend_servers = [ "web1" ]; };
   };
 }
