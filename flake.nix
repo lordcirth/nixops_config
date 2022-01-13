@@ -6,18 +6,23 @@
     nixops.url = "github:nixos/nixops";
   };
 
-  outputs = { self, nixpkgs, nixops }: {
-    nixopsConfigurations.default = {
-      nixpkgs = nixpkgs;
-      network = { enableRollback = true; };
+  outputs = { self, nixpkgs, nixops }:
+    let haproxy = s: (import ./haproxy.nix { sites = [ s ]; });
+    in {
+      nixopsConfigurations.default = {
+        nixpkgs = nixpkgs;
+        network = { enableRollback = true; };
 
-      defaults = {
-        deployment.targetHost = "localhost";
-        deployment.targetEnv = "libvirtd";
-        imports = [ ./common.nix ];
+        defaults = {
+          deployment.targetHost = "localhost";
+          deployment.targetEnv = "libvirtd";
+          imports = [ ./common.nix ];
+        };
+        web1 = import ./lighttpd.nix;
+        haproxy1 = haproxy {
+          sitename = "jargon";
+          backend_servers = [ "web1" ];
+        };
       };
-      web1 = import ./lighttpd.nix;
-      haproxy1 = { imports = [ ./haproxy.nix ]; };
     };
-  };
 }

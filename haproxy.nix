@@ -1,3 +1,4 @@
+{ sites }:
 { config, lib, pkgs, nodes, ... }:
 let
   unlines = lib.concatStringsSep "\n";
@@ -32,10 +33,11 @@ let
       stats uri /haproxy?stats
 
   '';
-  
-  site = { sitename, backend_servers }: ''
-    backend ${sitename}
-  '' + unlines (map (backend) backend_servers);
+
+  site = { sitename, backend_servers }:
+    ''
+      backend ${sitename}
+    '' + unlines (map (backend) backend_servers);
 
   backend = server: "  server ${server} ${server}:80 check";
 
@@ -45,6 +47,6 @@ in {
 
   services.haproxy = {
     enable = true;
-    config = global + stats + site { sitename = "jargon"; backend_servers = [ "web1" ]; };
+    config = global + stats + unlines (map (site) sites);
   };
 }
