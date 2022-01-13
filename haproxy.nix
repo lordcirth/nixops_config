@@ -1,4 +1,4 @@
-{ sites }:
+{ sites, floating_ip ? null }:
 { config, lib, pkgs, nodes, ... }:
 let
   unlines = lib.concatStringsSep "\n";
@@ -49,4 +49,6 @@ in {
     enable = true;
     config = global + stats + unlines (map (site) sites);
   };
+
+  services.keepalived = lib.mkIf (floating_ip != null) { enable = true; };
 }

@@ -7,7 +7,12 @@
   };
 
   outputs = { self, nixpkgs, nixops }:
-    let haproxy = s: (import ./haproxy.nix { sites = [ s ]; });
+    let
+      haproxy = s:
+        (import ./haproxy.nix {
+          sites = [ s ];
+          floating_ip = "192.168.122.10";
+        });
     in {
       nixopsConfigurations.default = {
         nixpkgs = nixpkgs;
