@@ -19,9 +19,10 @@
           imports = [ ./common.nix ];
         };
         web1 = import ./lighttpd.nix;
+        web2 = import ./lighttpd.nix;
         haproxy1 = haproxy {
           sitename = "jargon";
-          backend_servers = [ "web1" ];
+          backend_servers = [ "web1" "web2" ];
         };
       };
     };
