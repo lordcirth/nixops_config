@@ -30,7 +30,7 @@ let
       stats hide-version
       stats refresh 30s
       stats show-node
-      stats uri /haproxy?stats
+      stats uri /
 
   '';
 
