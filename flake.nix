@@ -8,11 +8,15 @@
 
   outputs = { self, nixpkgs, nixops }:
     let
-      haproxy = s:
-        (import ./haproxy.nix {
-          sites = [ s ];
-          floating_ip = "192.168.122.10";
-        });
+      sites = [{
+        sitename = "jargon";
+        backend_servers = [ "web1" "web2" ];
+      }];
+
+      haproxy = (import ./haproxy.nix {
+        inherit sites;
+        floating_ip = "192.168.122.10";
+      });
     in {
       nixopsConfigurations.default = {
         nixpkgs = nixpkgs;
@@ -25,10 +29,8 @@
         };
         web1 = import ./lighttpd.nix;
         web2 = import ./lighttpd.nix;
-        haproxy1 = haproxy {
-          sitename = "jargon";
-          backend_servers = [ "web1" "web2" ];
-        };
+        haproxy1 = haproxy;
+        haproxy2 = haproxy;
       };
     };
 }
