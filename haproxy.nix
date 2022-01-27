@@ -17,8 +17,11 @@ let
       bind 0.0.0.0:80
       bind 0.0.0.0:443
 
-
   '';
+
+  frontend_match = sitename: ''
+      use_backend ${sitename} if { ssl_fc_sni ${sitename}}
+  ''
 
   stats = ''
     listen stats
