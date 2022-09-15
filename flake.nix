@@ -20,7 +20,10 @@
     in {
       nixopsConfigurations.default = {
         nixpkgs = nixpkgs;
-        network = { enableRollback = true; };
+        network = {
+          enableRollback = true;
+          storage.legacy = { databasefile = "~/.nixops/deployments.nixops"; };
+        };
 
         defaults = {
           deployment.targetHost = "localhost";
